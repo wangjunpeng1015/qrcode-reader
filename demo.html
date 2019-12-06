@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="file" id="file" onchange="change(this)">
+</body>
+<script src="./qrReader.js"></script>
+<script src="./qr.js"></script>
+<script>
+    function getObjectURL(file) {
+        let url = null;
+        if (window.createObjectURL != undefined) {
+            // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) {
+            // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) {
+            // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+    function change(e) {
+        qrcode.decode(getObjectURL(e.files[0]));
+        qrcode.callback = function (qrUrl) {
+            if (qrUrl === "error decoding QR Code") {
+                alert.error("未能识别支付二维码！");
+            } else {
+                alert(qrUrl)
+            }
+        };
+    }
+</script>
+
+</html>
